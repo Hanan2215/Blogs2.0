@@ -1,4 +1,4 @@
-# Blogs2.0
+
 # Comprehensive Blogging Platform
 
 This project features a user-friendly blogging platform designed to empower users in content creation and management. With a focus on intuitive navigation and robust functionalities, this platform provides a seamless blogging experience for both novice and experienced users.
