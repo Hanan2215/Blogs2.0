@@ -1,0 +1,41 @@
+<!-- post_detail.html -->
+{% extends 'Base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="post-title">{{ post.title }}</h1>
+            {% if post.pic %}
+                <img src="{{ post.pic.url }}" class="post-image img-fluid" alt="{{ post.title }}" style="width: 70%; height: auto;">
+            {% endif %}
+            <div class="post-content mt-4">
+                {{ post.content|linebreaks }}
+            </div>
+            <h3>Comments</h3>
+            {%for comment in Comment%}
+            <div class="card mb-4">
+                <div class="card-body">
+                    <p class="small mb-0 ms-2">{{comment.author.username}}</p>
+
+                  <div class="d-flex justify-content-between">
+                    <div class="d-flex flex-row align-items-center">
+                        <p>{{comment.data}}</p>            
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {%endfor%}
+            </div>
+            <a href="/blogs/{{request.user.id}}" class="btn btn-secondary mt-4">Back to All Posts</a>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+
+
+

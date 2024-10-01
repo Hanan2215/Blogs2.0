@@ -1,0 +1,55 @@
+{%extends 'Adashboard.html'%}
+{%block start%}
+{% load static %}
+<br><br>
+<div class="container mt-4">
+    {% for post in allpost %}
+    <div class="row mb-4">
+        <!-- Post Content -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex align-items-center">
+                    <div>
+                        <h6 class="mb-0">{{ post.author.username }}</h6>
+                        <small class="text-muted">{{ post.created_at|date:"F j, Y" }}</small>
+                    </div>
+                </div>
+                <img src="/media/{{post.pic}}" class="card-img-top" alt="Blog Image">
+            <div class="card-body">
+                <h5 class="card-title">{{ post.title }}</h5>
+                <p class="card-text">{{ post.content }}</p>
+                <a href="{%url 'post_detail' post.id%}" class="btn btn-primary">Read More</a>
+                <a href="{%url 'post_aupd' post.id%}"><img src="/media/C:\Users\hp\Blogs\public\static\images\edit.png" style="height: 40px; margin-left: 120px;"></a>
+                <a href="{%url 'post_adlt' post.id%}"><img src="/media/C:\Users\hp\Blogs\public\static\images\dlt.png" style="height: 40px; margin-left: 0px;"></a>
+                
+            </div>
+                <div class="card-footer text-muted">
+                    Posted by {{ post.author.username }} on {{ post.created_at|date:"F j, Y, g:i a" }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="col-md-4">
+            <div class="card" >
+                <div class="card-body" style="height: 300px; overflow-y: auto;">
+                    <h6>Comments</h6>
+                    {% for comment in post.comment_set.all %}
+                        <div class="mb-2">
+                            <strong>{{ comment.author.username }}</strong> 
+                            <small class="text-muted">{{ comment.created_at|date:"F j, Y, g:i a" }}</small>
+                            {%if comment.author.id == request.user.id%}
+                            <a href="{%url 'comment_adlt' comment.id%}"><img src="/media/C:\Users\hp\Blogs\public\static\images\dlt.png" style="height: 15px; margin-left: 0px;"></a>
+                            {%endif%}
+                            <p>{{ comment.data }}</p>
+                        </div>
+                    {% empty %}
+                        <p>No comments yet.</p>
+                    {% endfor %}
+                </div>
+                <!-- Comment Form -->
+                </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>{%endblock%}

@@ -1,0 +1,21 @@
+{%extends 'Admin.html'%}
+{%block start%}
+<div class="content">
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <a href="/adashboard/">
+                        <h3>Total Posts</h3>
+                        <div class="number">{{posts}}</div> <!-- Replace '150' with actual number -->
+                    </a>
+                </div>
+            </div>
+        </div>
+    
+    <div class="card">
+        <h3>Total Posts</h3>
+        <div class="number">{{posts}}</div> <!-- Replace '320' with actual number -->
+    </div>
+</div>
+{%endblock%}

@@ -1,0 +1,35 @@
+{% extends 'Admin.html' %}
+{% block start %}
+{%if posts%}
+<h1 ><center>POSTS</center></h1>
+<table border="1" cellpadding="10">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Image</th>
+            <th>Created at</th>
+            <th>Author</th>
+            <th>Action</th>
+            
+        </tr>
+    </thead>
+{%for post in posts%}
+    <tbody>
+        <tr>
+            <td>{{post.title}}</td>
+            <td>{{post.content}}</td>
+            <td><img src="{{post.pic.url}}" height="50px"></img></td>
+            <td>{{post.created_at}}</td>
+            <td>{{ post.author.username }}</td>
+
+            <td class="action-column"> <!-- New "Action" column --> 
+                <a href="/post_adlt/{{post.id}}" style="color: red;">Delete</a>
+            </td>
+        </tr>
+    </tbody>
+{%endfor%}
+</table>
+{%endif%}
+
+{% endblock %}

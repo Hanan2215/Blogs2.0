@@ -1,0 +1,166 @@
+{% extends 'Base.html' %}
+{% block content %}
+{%if messages%}
+<div id="message-container">
+{%for message in messages%}
+<div class="alert alert-success" role="alert">
+    {{message}}
+  </div>
+{%endfor%}
+</div>
+{%endif%}
+<div class="container-fluid">
+    <!-- Main Content -->
+    <h1>Dashboard</h1>
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Search Box Section -->
+            <div class="col-md-4 text-start">
+                <form method="GET" class="mb-4 d-flex">
+                    <div class="input-group">
+                        <input type="text" name="search" class="form-control" placeholder="Search posts...">
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+            <!-- Buttons Section -->
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-auto text-start">
+                        <a href="/create/" class="btn btn-primary btn-lg" style="background-color: #28a745; border-color: #28a745;">
+                            <i class="bi bi-pencil-square"></i> Create Blog
+                        </a>
+                    </div>
+                    <div class="col-md-auto text-start">
+                        <a href="{% url 'blogspost' users.id %}" class="btn btn-primary btn-lg" style="background-color: #007bff; border-color: #007bff;">
+                            <i class="bi bi-pencil"></i> My Blogs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="container mt-4">
+        {% for post in allpost %}
+        <div class="row mb-4">
+            <!-- Post Content -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header d-flex align-items-center">
+                        <div>
+                            <h6 class="mb-0">{{ post.author.username }}</h6>
+                            <small class="text-muted">{{ post.created_at|date:"F j, Y" }}</small>
+                        </div>
+                    </div>
+                    <img src="{{ post.pic.url }}" class="card-img-top" alt="{{ post.title }}" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h6 class="card-title">{{ post.title }}</h6>
+                        <p class="card-text">{{ post.content|truncatewords:20 }}</p>
+                        <a href="{% url 'post_detail' post.id %}" class="btn btn-primary">Read More</a> <!-- Link to full post -->
+                    </div>
+                    <div class="card-footer text-muted">
+                        Posted by {{ post.author.username }} on {{ post.created_at|date:"F j, Y, g:i a" }}
+                    </div>
+                </div>
+            </div>
+    
+            <!-- Comments Section -->
+            <div class="col-md-4">
+                <div class="card" >
+                    <div class="card-body" style="height: 300px; overflow-y: auto;">
+                        <h6>Comments</h6>
+                        {% for comment in post.comment_set.all %}
+                            <div class="mb-2">
+                                <strong>{{ comment.author.username }}</strong> 
+                                <small class="text-muted">{{ comment.created_at|date:"F j, Y, g:i a" }}</small>
+                                {%if comment.author.id == request.user.id%}
+                                <a href="{%url 'comment_dlt' comment.id%}"><img src="/media/C:\Users\hp\Blogs\public\static\images\dlt.png" style="height: 15px; margin-left: 0px;"></a>
+                                {%endif%}
+                                <p>{{ comment.data }}</p>
+                            </div>
+                        {% empty %}
+                            <p>No comments yet.</p>
+                        {% endfor %}
+                    </div>
+                    <!-- Comment Form -->
+                    <div class="card-footer">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="hidden" name="postc" value="{{post.id}}">
+                                <textarea name="data" class="form-control" rows="2" placeholder="Add a comment..." required></textarea>
+                                <button type="submit" class="btn btn-primary btn-sm mt-2">Send</button>
+                            </div>
+                            
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    
+                   
+    
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users</h5>
+                    <p class="card-text">1,024</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Active Sessions</h5>
+                    <p class="card-text">256</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">New Signups</h5>
+                    <p class="card-text">75</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Server Status</h5>
+                    <p class="card-text">Online</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Content -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Overview</h5>
+                    <p class="card-text">This is an overview of your application's performance and activity. You can see the total number of users, active sessions, new signups, and the current server status.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Wait for the DOM to be fully loaded
+    document.addEventListener("DOMContentLoaded", function() {
+        // Select the message container
+        const messageContainer = document.getElementById('message-container');
+        if (messageContainer) {
+            // Set a timeout to hide the messages after 5 seconds (5000ms)
+            setTimeout(function() {
+                messageContainer.style.display = 'none';
+            }, 3000);  // 5000 milliseconds = 5 seconds
+        }
+    });
+</script>
+
+{% endblock %}
